@@ -16,17 +16,23 @@
     </Window.Resources>
     
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="10,20,12.5,12.5" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button x:Name="btnOk" Content="OK" Style="{StaticResource ButtonTemplateStyle}" Height="25" Width="75" Margin="0,0,10,0" Click="btnOK_Click">
-                <Button.Effect>
-                    <DropShadowEffect BlurRadius="5" Color="Gray" Direction="270" Opacity=".5" ShadowDepth="1" />
-                </Button.Effect>
-            </Button>
-            <Button Content="Cancel" Style="{StaticResource ButtonTemplateStyle}" Height="25" Width="75" Click="btnCancel_Click">
-                <Button.Effect>
-                    <DropShadowEffect BlurRadius="5" Color="Gray" Direction="270" Opacity=".5" ShadowDepth="1" />
-                </Button.Effect>
-            </Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="10,10,0,5" VerticalAlignment="Top">
+
         </StackPanel>
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Margin="0,20,15,10" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,10">
+                <Button x:Name="addMaterial" Content="Add Material" Style="{StaticResource ButtonTemplateStyle}" Width="160" Margin="0" Click="addMaterial_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button x:Name="btnOk" Content="OK" Style="{StaticResource ButtonTemplateStyle}" Margin="0,0,10,0" Click="btnOK_Click"/>
+                <Button Content="Cancel" Style="{StaticResource ButtonTemplateStyle}" Click="btnCancel_Click"/>
+
+            </StackPanel>
+        </StackPanel>
+
     </Grid>
 </Window>

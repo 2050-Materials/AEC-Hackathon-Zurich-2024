@@ -61,6 +61,7 @@ namespace TwentyFiftyMaterialsUI
 
 
         #region abstract methods
+        public abstract void AddMaterial();
         public abstract void SetCurrentProject();
         public abstract void ReadProjectInfoParameters();
         public abstract void UpdateModifiedElements();

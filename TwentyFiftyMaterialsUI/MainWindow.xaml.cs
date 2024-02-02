@@ -79,5 +79,10 @@ namespace TwentyFiftyMaterialsUI
             this.DialogResult = false;
             this.Close();
         }
+
+        private void addMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            Bindings.AddMaterial();
+        }
     }
 }

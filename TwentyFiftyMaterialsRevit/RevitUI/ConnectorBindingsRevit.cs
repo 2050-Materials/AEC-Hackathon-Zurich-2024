@@ -23,11 +23,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         public static ProjectInfo ProjectInformation => Utilities.CollectElementInstances(CurrentDoc.Document, BuiltInCategory.OST_ProjectInformation).Cast<ProjectInfo>().ToList()[0];
         public static List<ElementId> NewElementIds = new List<ElementId>();
 
-        public View3D View_PENE { get; set; }
-        public View3D View_THG { get; set; }
-        public View3D View_HW_U_Wert { get; set; }
-
-
 
         /// <summary>
         /// Stores the actions for the ExternalEvent handler
@@ -36,7 +31,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
         public ExternalEvent Executor;
 
-        public Timer SelectionTimer;
 
         public ConnectorBindingsRevit(UIApplication revitApp) : base()
         {
@@ -52,24 +46,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         public void SetExecutorAndInit(ExternalEvent executor)
         {
             Executor = executor;
-            //ExecutorHandler = executorHandler;
-
-            // LOCAL STATE
-            // GetStreamsInFile();
-
-            //// GLOBAL EVENT HANDLERS
-            //RevitApp.ViewActivated += RevitApp_ViewActivated;
-            ////RevitApp.Application.DocumentChanged += Application_DocumentChanged;
-            //RevitApp.Application.DocumentOpened += Application_DocumentOpened;
-            //RevitApp.Application.DocumentClosed += Application_DocumentClosed;
-            //RevitApp.ViewActivated += AppInstance_ViewActivated;
-            //RevitApp.ViewActivating += AppInstance_ViewActivating;
-
-
-            //SelectionTimer = new Timer(1000) { AutoReset = true, Enabled = true };
-            //SelectionTimer.Elapsed += SelectionTimer_Elapsed;
-            // TODO: Find a way to handle when document is closed via middle mouse click
-            // thus triggering the focus on a new project
         }
 
         public override void DisposeExecutor()
@@ -220,6 +196,7 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
             return projectCulture;
         }
+
 
     }
 }

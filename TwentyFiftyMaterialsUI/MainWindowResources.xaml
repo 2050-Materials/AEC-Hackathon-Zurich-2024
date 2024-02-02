@@ -394,7 +394,14 @@
         <Setter Property="Background" Value="#373737" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="15" />
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="75" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Button.Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="5" Color="Gray" Direction="270" Opacity=".5" ShadowDepth="1" />
+            </Setter.Value>
+        </Setter>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -404,6 +411,8 @@
                             <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
                         </Grid>
                     </Border>
+
+
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
