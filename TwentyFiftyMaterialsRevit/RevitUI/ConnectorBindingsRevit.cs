@@ -196,7 +196,5 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
             return projectCulture;
         }
-
-
     }
 }

@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectorRevitUtils.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="ExternalEventHandler.cs" />
     <Compile Include="RevitUI\ConnectorBindingsRevit.Materials.cs" />
     <Compile Include="Utilities.cs" />

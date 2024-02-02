@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TwentyFiftyMaterialsUI.Utils;
 
 namespace TwentyFiftyMaterialsUI
 {
@@ -22,25 +23,24 @@ namespace TwentyFiftyMaterialsUI
 
         public static CultureInfo ProjectCultureInfo = new CultureInfo("", true);
 
+        public MainWindow()
+        {
+            Bindings = new DummyBindings();
+            Bindings.InitialiseUI(this);
+
+            Closed += MainWindow_Closed;
+
+            InitializeComponent();
+        }
+
         public MainWindow(ConnectorBindings bindings)
         {
             Bindings = bindings;
             Bindings.InitialiseUI(this);
 
             Closed += MainWindow_Closed;
-            Deactivated += MainWindow_Deactivated;
 
             InitializeComponent();
-        }
-
-        private void MainWindow_Deactivated(object sender, EventArgs e)
-        {
-            Window window = (Window)sender;
-            //if (window..Topmost)
-            //{
-            //    window.Topmost = true;
-            //}
-
         }
 
         /// <summary>
@@ -68,21 +68,34 @@ namespace TwentyFiftyMaterialsUI
 
         }
 
+        private void closeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void minimiseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.ShowInTaskbar) this.WindowState = WindowState.Minimized;
+        }
+
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
             this.Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
             this.Close();
         }
 
         private void addMaterial_Click(object sender, RoutedEventArgs e)
         {
             Bindings.AddMaterial();
+        }
+
+        private void Materials_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

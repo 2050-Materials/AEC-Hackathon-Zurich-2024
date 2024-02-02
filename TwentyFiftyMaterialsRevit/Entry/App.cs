@@ -116,11 +116,10 @@ namespace TwentyFiftyMaterialsRevit.Entry
             if (e.CurrentActiveView == null) return;
             if (e.CurrentActiveView.Document == null) return;
             if (e.CurrentActiveView.Document.GetHashCode().Equals(e.NewActiveView.Document.GetHashCode())) return;
-            if (TwentyFiftyMaterialsCommand.Bindings.TFMDialog == null) return;
+            if (TwentyFiftyMaterialsCommand.Bindings == null ||
+                TwentyFiftyMaterialsCommand.Bindings.TFMDialog == null) return;
 
-            TwentyFiftyMaterialsCommand.Bindings.TFMDialog.DialogResult = false;
             TwentyFiftyMaterialsCommand.Bindings.TFMDialog.Close();
-            TwentyFiftyMaterialsCommand.Bindings.TFMDialog = null;
         }
 
         private void AppInstance_ViewActivated(object sender, ViewActivatedEventArgs e)
@@ -157,9 +156,8 @@ namespace TwentyFiftyMaterialsRevit.Entry
 
         private void Application_DocumentClosed(object sender, Autodesk.Revit.DB.Events.DocumentClosedEventArgs e)
         {
-            if (TwentyFiftyMaterialsCommand.Bindings == null) return;
-            TwentyFiftyMaterialsCommand.Bindings.TFMDialog = null;
-            if (TwentyFiftyMaterialsCommand.Bindings.TFMDialog == null) return;
+            if (TwentyFiftyMaterialsCommand.Bindings == null || 
+                TwentyFiftyMaterialsCommand.Bindings.TFMDialog == null) return;
             TwentyFiftyMaterialsCommand.Bindings.TFMDialog.Close();
         }
     }

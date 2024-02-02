@@ -39,6 +39,7 @@ namespace TwentyFiftyMaterialsRevit.Entry
                 windowInteropHelper.Owner = app.MainWindowHandle;
                 Bindings.TFMDialog.Show();
             }
+
         }
 
         static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)

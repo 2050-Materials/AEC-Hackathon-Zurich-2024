@@ -18,7 +18,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         {
             if (CurrentDoc == null) return;
             if (CurrentProject != null) return;
-
         }
 
 
