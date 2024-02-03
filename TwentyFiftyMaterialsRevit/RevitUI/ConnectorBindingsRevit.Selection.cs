@@ -38,7 +38,17 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
         public override void ApplyAssemblyToSelectedElement()
         {
+            Queue.Add(new Action(() =>
+            {
+                using (Transaction transaction = new Transaction(CurrentDoc.Document, "Apply Material to Selected Eleent"))
+                {
+                    transaction.Start();
+                    AppltMaterialToElementProperties_Unwrapped();
+                    transaction.Commit();
+                }
 
+            }));
+            Executor.Raise();
         }
         public override void AppltMaterialToElementProperties()
         {

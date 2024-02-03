@@ -24,7 +24,7 @@
             <TextBlock>
                 Select Assembly
             </TextBlock>
-            <ComboBox SelectionChanged="ComboBox_SelectionChanged" Style="{StaticResource ComboBoxTemplateStyle}">
+            <ComboBox x:Name="AssembliesComboBox" SelectionChanged="AssembliesComboBox_SelectionChanged" Style="{StaticResource ComboBoxTemplateStyle}">
 
             </ComboBox>
         </StackPanel>

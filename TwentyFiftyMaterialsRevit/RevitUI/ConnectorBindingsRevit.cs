@@ -23,7 +23,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         public static ProjectInfo ProjectInformation => Utilities.CollectElementInstances(CurrentDoc.Document, BuiltInCategory.OST_ProjectInformation).Cast<ProjectInfo>().ToList()[0];
         public static List<ElementId> NewElementIds = new List<ElementId>();
 
-
         /// <summary>
         /// Stores the actions for the ExternalEvent handler
         /// </summary>
