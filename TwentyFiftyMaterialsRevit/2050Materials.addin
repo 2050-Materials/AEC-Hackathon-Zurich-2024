@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>2050Materials</Name>
+		<Assembly>TwentyFiftyMaterialsRevit.dll</Assembly>
+		<AddInId>784410C0-E446-4B2F-B669-2317A513F282</AddInId>
+		<FullClassName>TwentyFiftyMaterialsRevit.Entry.App</FullClassName>
+		<VendorId>Sci Mode Ltd.</VendorId>
+		<VendorDescription>https://www.sci-mode.com/</VendorDescription>
+	</AddIn>
+</RevitAddIns>
