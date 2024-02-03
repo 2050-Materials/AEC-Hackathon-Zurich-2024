@@ -14,7 +14,7 @@ namespace TwentyFiftyMaterialsCore
         {
             DataTable table = null;
 
-            string filePath = "";
+            string filePath = "TwentyFiftyMaterialsCore.Database.assembly buildup.xlsx";
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath))
             {
@@ -30,28 +30,58 @@ namespace TwentyFiftyMaterialsCore
                 }
             }
 
-            int start_row = 0;
-            int end_row = 10;
-            List < TFAssembly > assemblies = new  List < TFAssembly >();
-            for (int r = start_row; r <= end_row; r++)
-            {
-                TFAssembly assembly = new TFAssembly
-                {
+            int start_row = 1;
+            int end_row = 45;
+            string assembly_code = "W1";
 
-                    Name = table.Rows[r].ItemArray[0].ToString(),
-                    CO2 = ValueConverter.StringToDouble(table.Rows[r].ItemArray[1].ToString()),
-                    Materials = ParseMaterials(table.Rows[r].ItemArray[2].ToString()),
+            
+            List<TFAssembly> assemblies = new List<TFAssembly>();
+            TFAssembly currentAssembly = new TFAssembly()
+            {
+                AssemblyCode = assembly_code,
+                Materials = new List<TFMaterial>()
+            };
+
+            List<TFMaterial> currentMaterials = new List<TFMaterial>();
+            
+
+            for (int r = start_row; r < end_row; r++)
+            {
+                string current_assembly_code = table.Rows[r].ItemArray[0].ToString();
+
+                if (current_assembly_code != assembly_code)
+                {
+                    currentAssembly.XXX_CO2_M_NAME = table.Rows[r - 1].ItemArray[1].ToString();
+                    currentAssembly.Materials = currentMaterials;
+                    assemblies.Add(currentAssembly);
+
+
+                    currentMaterials = new List<TFMaterial>();
+                    assembly_code = current_assembly_code;
+
+                    currentAssembly = new TFAssembly()
+                    {
+                        AssemblyCode = assembly_code,
+                        Materials = new List<TFMaterial>()
+                    };
+                }
+
+                TFMaterial currentMaterial = new TFMaterial()
+                {
+                    MaterialName = table.Rows[r].ItemArray[3].ToString(),
+                    MaterialURL = table.Rows[r].ItemArray[4].ToString(),
+                    MaterialThickness= ValueConverter.StringToDouble(table.Rows[r].ItemArray[7].ToString()),
+                    MaterialQuantity = ValueConverter.StringToDouble(table.Rows[r].ItemArray[10].ToString())
                 };
 
-                assemblies.Add(assembly);
+                currentMaterials.Add(currentMaterial);
             }
 
+            currentAssembly.XXX_CO2_M_NAME = table.Rows[end_row - 1].ItemArray[1].ToString();
+            currentAssembly.Materials = currentMaterials;
+            assemblies.Add(currentAssembly);
+            
             return assemblies;
-        }
-
-        private static List<TFMaterial> ParseMaterials(string v)
-        {
-            return new List<TFMaterial>();
         }
     }
 }

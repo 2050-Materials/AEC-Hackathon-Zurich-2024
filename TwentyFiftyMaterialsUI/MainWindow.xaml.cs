@@ -70,6 +70,7 @@ namespace TwentyFiftyMaterialsUI
         {
             ProjectModel.Initialize();
             PopulateAssembliesComboBox();
+
         }
 
         private void closeBtn_Click(object sender, RoutedEventArgs e)
@@ -109,10 +110,8 @@ namespace TwentyFiftyMaterialsUI
 
         private void PopulateAssembliesComboBox()
         {
-
-
             AssembliesComboBox.ItemsSource = ProjectModel.MaterialAssembies;
-            AssembliesComboBox.DisplayMemberPath = "Name";
+            AssembliesComboBox.DisplayMemberPath = "XXX_CO2_M_NAME";
         }
 
         private void AssembliesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

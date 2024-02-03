@@ -62,24 +62,12 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
             var groupNames = (from def in definitionGroup.Definitions select def.Name).ToList();
 
-            foreach (TFParameter<string> parameter in ProjectParameters.StringParameters)
-            {
-                string newParameterName = CreateStringParameter(parameter, definitionGroup.Definitions, groupNames);
-            }
-            foreach (TFParameter<int> parameter in ProjectParameters.IntegerParameters)
-            {
-                string newParameterName = CreateIntegerParameter(parameter, definitionGroup.Definitions, groupNames);
-            }
-            foreach (TFParameter<double> parameter in ProjectParameters.DoubleParameters)
-            {
-                string newParameterName = CreateDoubleParameter(parameter, definitionGroup.Definitions, groupNames);
-            }
+            CreateDoubleParameter("XXX_CO2_M_THICKNESS", definitionGroup.Definitions, groupNames);
+            CreateStringParameter("XXX_CO2_M_NAME", definitionGroup.Definitions, groupNames);
+            CreateStringParameter("XXX_CO2_M_UNITS", definitionGroup.Definitions, groupNames);
+            CreateDoubleParameter("XXX_CO2_M_EMBODIEDCARBON", definitionGroup.Definitions, groupNames);
 
-
-            // Order shared params by name before iterating
-            List<Definition> orderedDefs = definitionGroup.Definitions.ToList();
-
-            foreach (Definition parameterDef in orderedDefs)
+            foreach (Definition parameterDef in definitionGroup.Definitions)
             {
                 if (CurrentDoc.Document.ParameterBindings.Contains(parameterDef)) continue;
                 InstanceBinding instanceBinding = RevitApp.Application.Create.NewInstanceBinding(categorySet);
@@ -137,63 +125,61 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
             return categorySet;
         }
 
-        internal static string CreateStringParameter(TFParameter<string> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateStringParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.String.Text);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.String.Text);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
         }
 
-        internal static string CreateDoubleParameter(TFParameter<double> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateDoubleParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.Number);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.Number);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
         }
 
-        internal static string CreateIntegerParameter(TFParameter<int> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateIntegerParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.Int.Integer);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.Int.Integer);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
+            return;
         }
 
 
