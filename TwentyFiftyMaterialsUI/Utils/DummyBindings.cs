@@ -16,6 +16,11 @@ namespace TwentyFiftyMaterialsUI.Utils
             return;
         }
 
+        public override void ApplyMaterialToSelection()
+        {
+            return;
+        }
+
         public override void DisposeExecutor()
         {
             return;
@@ -76,9 +81,14 @@ namespace TwentyFiftyMaterialsUI.Utils
             return;
         }
 
-        public override void UpdateModifiedElements()
+        public override void AppltMaterialToElementProperties()
         {
             return;
+        }
+
+        public override void ApplyAssemblyToSelectedElement()
+        {
+            throw new NotImplementedException();
         }
     }
 }

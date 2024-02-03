@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TwentyFiftyMaterialsCore.Models;
 using TwentyFiftyMaterialsUI.Utils;
 
 namespace TwentyFiftyMaterialsUI
@@ -88,14 +90,27 @@ namespace TwentyFiftyMaterialsUI
             this.Close();
         }
 
+        private void Materials_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+
         private void addMaterial_Click(object sender, RoutedEventArgs e)
         {
             Bindings.AddMaterial();
         }
-
-        private void Materials_MouseDown(object sender, MouseButtonEventArgs e)
+        private void applyToSelection_Click(object sender, RoutedEventArgs e)
         {
-            this.DragMove();
+            Bindings.ApplyAssemblyToSelectedElement();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //string selectedAssemblyName = "";
+            //TFAssembly assembly =  ProjectModel.MaterialAssembies.FirstOrDefault(selectedAssemblyName);
+            //assembly.Calculate();
+            //ProjectModel.SelectedAssembly = assembly;
         }
     }
 }

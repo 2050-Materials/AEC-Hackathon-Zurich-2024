@@ -13,10 +13,51 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 {
     public partial class ConnectorBindingsRevit
     {
+        public override void ApplyMaterialToSelection()
+        {
+            if (CurrentDoc == null) return;
+            if (ProjectModel.SelectedMaterial == null) return;
 
-        public override void UpdateModifiedElements()
+            ICollection<ElementId> selectedElementIds = CurrentDoc.Selection.GetElementIds();
+
+            foreach (ElementId elementId in selectedElementIds)
+            {
+                Element element = CurrentDoc.Document.GetElement(elementId);
+                if (element.Category == null) continue;
+
+                int elementCategory = (int)Utilities.ParameterCategories.Where(item => (int)item == element.Category.Id.IntegerValue).FirstOrDefault();
+
+                // If seleted element is not in allowed categories no parameters are written
+                if (elementCategory == 0)
+                {
+                    continue;
+                }
+            }
+        }
+
+
+        public override void ApplyAssemblyToSelectedElement()
         {
 
+        }
+        public override void AppltMaterialToElementProperties()
+        {
+            Queue.Add(new Action(() =>
+            {
+                using (Transaction transaction = new Transaction(CurrentDoc.Document, "Apply Material to Selected Eleent"))
+                {
+                    transaction.Start();
+                    AppltMaterialToElementProperties_Unwrapped();
+                    transaction.Commit();
+                }
+
+            }));
+            Executor.Raise();
+        }
+
+        private void AppltMaterialToElementProperties_Unwrapped()
+        {
+            throw new NotImplementedException();
         }
 
         public override List<string> GetObjectsInView()
