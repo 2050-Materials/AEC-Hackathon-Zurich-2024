@@ -18,7 +18,7 @@ namespace TwentyFiftyMaterialsUI
 
         }
 
-        public static readonly string AddOnName = "";
+        public static readonly string AddOnName = "2050Materials";
 
         public MainWindow TFMDialog { get; set; }
 
@@ -62,9 +62,10 @@ namespace TwentyFiftyMaterialsUI
 
         #region abstract methods
         public abstract void AddMaterial();
+        public abstract void ApplyMaterialToSelection();
         public abstract void SetCurrentProject();
         public abstract void ReadProjectInfoParameters();
-        public abstract void UpdateModifiedElements();
+        public abstract void AppltMaterialToElementProperties();
         
         /// <summary>
         /// Form closed event handler
@@ -112,6 +113,13 @@ namespace TwentyFiftyMaterialsUI
         /// </summary>
         /// <returns></returns>
         public abstract List<string> GetObjectsInView();
+
+        internal void Calculate()
+        {
+            //ProjectModel.SelectedAssembly
+        }
+
+        public abstract void ApplyAssemblyToSelectedElement();
         #endregion
     }
 }
