@@ -33,7 +33,7 @@ namespace TwentyFiftyMaterialsRevit
             } 
             Running = true;
 
-            CheckIfQueueIsCyclic();
+            //CheckIfQueueIsCyclic();
 
 
 

@@ -23,6 +23,20 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         }
 
 
+        public override void CreateElementParameters()
+        {
+            Queue.Add(new Action(() =>
+            {
+                using (Transaction t = new Transaction(CurrentDoc.Document, "Create Element Parameters"))
+                {
+                    t.Start();
+                    CreateElementParameters_Unwrapped();
+                    t.Commit();
+                }
+            }));
+            Executor.Raise();
+        }
+
         public void CreateElementParameters_Unwrapped()
         {
             // Create Element Parameters
@@ -32,28 +46,53 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
         private void CreateParameters(CategorySet categorySet)
         {
-            DefinitionFile sharedParameterFileDefinition = RevitApp.Application.OpenSharedParameterFile();
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
+            string sharedParameterFilePath = assemblyDirectory + @"\2050Materials.txt";
 
-            DefinitionGroup definitionGroup = sharedParameterFileDefinition == null ? 
-                null : sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+            DefinitionFile sharedParameterFileDefinition = SetAndOpenExternalSharedParamFile(sharedParameterFilePath);
 
-            if (sharedParameterFileDefinition == null || definitionGroup == null)
+            DefinitionGroup definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+
+            if (definitionGroup == null)
             {
-                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                string assemblyDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
-                string sharedParameterFilePath = assemblyDirectory + @"\2050Materials.txt";
-
-                sharedParameterFileDefinition = SetAndOpenExternalSharedParamFile(sharedParameterFilePath);
+                sharedParameterFileDefinition.Groups.Create(AddOnName);
+                definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
             }
 
-            definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+            var groupNames = (from def in definitionGroup.Definitions select def.Name).ToList();
 
-            TFParameter<string> parameter = new TFParameter<string>();
+            foreach (TFParameter<string> parameter in ProjectParameters.StringParameters)
+            {
+                string newParameterName = CreateStringParameter(parameter, definitionGroup.Definitions, groupNames);
+            }
+            foreach (TFParameter<int> parameter in ProjectParameters.IntegerParameters)
+            {
+                string newParameterName = CreateIntegerParameter(parameter, definitionGroup.Definitions, groupNames);
+            }
+            foreach (TFParameter<double> parameter in ProjectParameters.DoubleParameters)
+            {
+                string newParameterName = CreateDoubleParameter(parameter, definitionGroup.Definitions, groupNames);
+            }
 
-            parameter.Name = "Test";
-            parameter.Value = "Test";
 
-            CreateStringParameter(parameter, definitionGroup.Definitions, (from def in definitionGroup.Definitions select def.Name).ToList());
+            // Order shared params by name before iterating
+            List<Definition> orderedDefs = definitionGroup.Definitions.ToList();
+
+            foreach (Definition parameterDef in orderedDefs)
+            {
+                if (CurrentDoc.Document.ParameterBindings.Contains(parameterDef)) continue;
+                InstanceBinding instanceBinding = RevitApp.Application.Create.NewInstanceBinding(categorySet);
+
+
+                // Get the BingdingMap of current document.
+                BindingMap bindingMap = RevitApp.ActiveUIDocument.Document.ParameterBindings;
+
+                // Bind the definitions to the document
+                bool instanceBindOK = bindingMap.Insert(parameterDef,
+                                                        instanceBinding,
+                                                        BuiltInParameterGroup.PG_ANALYSIS_RESULTS);
+            }
         }
         private DefinitionFile SetAndOpenExternalSharedParamFile(string sharedParameterFilePath)
         {
@@ -67,7 +106,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
             // open the file
             return RevitApp.Application.OpenSharedParameterFile();
-
         }
 
         private void CreateExternalSharedParamFile(string sharedParameterFilePath)

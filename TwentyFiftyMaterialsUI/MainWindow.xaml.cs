@@ -68,6 +68,7 @@ namespace TwentyFiftyMaterialsUI
         //Handles the Load event of the SpiralLayoutForm Load
         private void UI_Loaded(object sender, RoutedEventArgs e)
         {
+            ProjectModel.Initialize();
             PopulateAssembliesComboBox();
         }
 
@@ -108,7 +109,7 @@ namespace TwentyFiftyMaterialsUI
 
         private void PopulateAssembliesComboBox()
         {
-            ProjectModel.PopulateAssemblies();
+
 
             AssembliesComboBox.ItemsSource = ProjectModel.MaterialAssembies;
             AssembliesComboBox.DisplayMemberPath = "Name";

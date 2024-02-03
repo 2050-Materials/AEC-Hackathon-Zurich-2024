@@ -88,7 +88,12 @@ namespace TwentyFiftyMaterialsUI.Utils
 
         public override void ApplyAssemblyToSelectedElement()
         {
-            throw new NotImplementedException();
+            return;
+        }
+
+        public override void CreateElementParameters()
+        {
+            return;
         }
     }
 }

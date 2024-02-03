@@ -15,12 +15,20 @@ namespace TwentyFiftyMaterialsCore.Models
         public static void PopulateAssemblies()
         {
             // Dummy example for populating assemblies
-            MaterialAssembies = new List<TFAssembly>();
-            List<TFMaterial> materials = new List<TFMaterial>();
-            materials.Add(new TFMaterial() { Name = "Material" });
-            MaterialAssembies.Add(new TFAssembly() { Name="Assembly1", Materials = materials });
-            MaterialAssembies.Add(new TFAssembly() { Name = "Assembly2", Materials = materials });
+            MaterialAssembies = ReadExcel.ReadExcelTable();
+                
+            //    new List<TFAssembly>();
+            //List<TFMaterial> materials = new List<TFMaterial>();
+            //materials.Add(new TFMaterial() { Name = "Material" });
+            //MaterialAssembies.Add(new TFAssembly() { Name="Assembly1", Materials = materials });
+            //MaterialAssembies.Add(new TFAssembly() { Name = "Assembly2", Materials = materials });
 
+        }
+
+        public static void Initialize()
+        {
+            PopulateAssemblies();
+            ProjectParameters.PopulateParameters();
         }
     }
 }

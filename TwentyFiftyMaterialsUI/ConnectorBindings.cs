@@ -31,6 +31,8 @@ namespace TwentyFiftyMaterialsUI
             SetUICultureInfo();
             SetCurrentProject();
             SetProjectName();
+
+            CreateElementParameters();
         }
 
         public void SetUICultureInfo()
@@ -61,6 +63,7 @@ namespace TwentyFiftyMaterialsUI
 
 
         #region abstract methods
+        public abstract void CreateElementParameters();
         public abstract void AddMaterial();
         public abstract void ApplyMaterialToSelection();
         public abstract void SetCurrentProject();
