@@ -20,5 +20,13 @@ namespace TwentyFiftyMaterialsCore.Models
         {
             return Area * CO2;
         }
+
+        public void CalculateMaterials()
+        {
+            foreach (TFMaterial material in Materials)
+            {
+                material.Calculate();
+            }
+        }
     }
 }

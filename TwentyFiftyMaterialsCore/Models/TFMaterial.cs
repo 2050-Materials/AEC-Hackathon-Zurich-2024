@@ -14,5 +14,10 @@ namespace TwentyFiftyMaterialsCore.Models
         {
 
         }
+
+        internal void Calculate()
+        {
+
+        }
     }
 }

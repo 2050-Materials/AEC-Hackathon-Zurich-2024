@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -67,7 +68,7 @@ namespace TwentyFiftyMaterialsUI
         //Handles the Load event of the SpiralLayoutForm Load
         private void UI_Loaded(object sender, RoutedEventArgs e)
         {
-
+            PopulateAssembliesComboBox();
         }
 
         private void closeBtn_Click(object sender, RoutedEventArgs e)
@@ -105,12 +106,19 @@ namespace TwentyFiftyMaterialsUI
             Bindings.ApplyAssemblyToSelectedElement();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PopulateAssembliesComboBox()
         {
-            //string selectedAssemblyName = "";
-            //TFAssembly assembly =  ProjectModel.MaterialAssembies.FirstOrDefault(selectedAssemblyName);
-            //assembly.Calculate();
-            //ProjectModel.SelectedAssembly = assembly;
+            ProjectModel.PopulateAssemblies();
+
+            AssembliesComboBox.ItemsSource = ProjectModel.MaterialAssembies;
+            AssembliesComboBox.DisplayMemberPath = "Name";
+        }
+
+        private void AssembliesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox combobox = (ComboBox)sender;
+            TFAssembly assembly = combobox.SelectedItem as TFAssembly;
+            ProjectModel.SelectedAssembly = assembly;
         }
     }
 }
