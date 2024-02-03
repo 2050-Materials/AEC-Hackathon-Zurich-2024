@@ -10,3 +10,5 @@ Public repository for all the assets and results of the AEC Hackathon https://ww
 5. Push to the branch (git push origin <your favourite branch name>)
 6. Create a new Pull Request
 7. Please contribute the code which doesn't violate any copyright and is originally yours. Otherwise, please get approval from the copyright owner.
+
+Forking is needed
