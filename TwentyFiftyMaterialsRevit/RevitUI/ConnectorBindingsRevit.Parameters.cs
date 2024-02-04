@@ -23,6 +23,20 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
         }
 
 
+        public override void CreateElementParameters()
+        {
+            Queue.Add(new Action(() =>
+            {
+                using (Transaction t = new Transaction(CurrentDoc.Document, "Create Element Parameters"))
+                {
+                    t.Start();
+                    CreateElementParameters_Unwrapped();
+                    t.Commit();
+                }
+            }));
+            Executor.Raise();
+        }
+
         public void CreateElementParameters_Unwrapped()
         {
             // Create Element Parameters
@@ -32,28 +46,41 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
         private void CreateParameters(CategorySet categorySet)
         {
-            DefinitionFile sharedParameterFileDefinition = RevitApp.Application.OpenSharedParameterFile();
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
+            string sharedParameterFilePath = assemblyDirectory + @"\2050Materials.txt";
 
-            DefinitionGroup definitionGroup = sharedParameterFileDefinition == null ? 
-                null : sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+            DefinitionFile sharedParameterFileDefinition = SetAndOpenExternalSharedParamFile(sharedParameterFilePath);
 
-            if (sharedParameterFileDefinition == null || definitionGroup == null)
+            DefinitionGroup definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+
+            if (definitionGroup == null)
             {
-                string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                string assemblyDirectory = System.IO.Path.GetDirectoryName(assemblyLocation);
-                string sharedParameterFilePath = assemblyDirectory + @"\2050Materials.txt";
-
-                sharedParameterFileDefinition = SetAndOpenExternalSharedParamFile(sharedParameterFilePath);
+                sharedParameterFileDefinition.Groups.Create(AddOnName);
+                definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
             }
 
-            definitionGroup = sharedParameterFileDefinition.Groups.get_Item(AddOnName);
+            var groupNames = (from def in definitionGroup.Definitions select def.Name).ToList();
 
-            TFParameter<string> parameter = new TFParameter<string>();
+            CreateDoubleParameter("XXX_CO2_M_THICKNESS", definitionGroup.Definitions, groupNames);
+            CreateStringParameter("XXX_CO2_M_NAME", definitionGroup.Definitions, groupNames);
+            CreateStringParameter("XXX_CO2_M_UNITS", definitionGroup.Definitions, groupNames);
+            CreateDoubleParameter("XXX_CO2_M_EMBODIEDCARBON", definitionGroup.Definitions, groupNames);
 
-            parameter.Name = "Test";
-            parameter.Value = "Test";
+            foreach (Definition parameterDef in definitionGroup.Definitions)
+            {
+                if (CurrentDoc.Document.ParameterBindings.Contains(parameterDef)) continue;
+                InstanceBinding instanceBinding = RevitApp.Application.Create.NewInstanceBinding(categorySet);
 
-            CreateStringParameter(parameter, definitionGroup.Definitions, (from def in definitionGroup.Definitions select def.Name).ToList());
+
+                // Get the BingdingMap of current document.
+                BindingMap bindingMap = RevitApp.ActiveUIDocument.Document.ParameterBindings;
+
+                // Bind the definitions to the document
+                bool instanceBindOK = bindingMap.Insert(parameterDef,
+                                                        instanceBinding,
+                                                        BuiltInParameterGroup.PG_ANALYSIS_RESULTS);
+            }
         }
         private DefinitionFile SetAndOpenExternalSharedParamFile(string sharedParameterFilePath)
         {
@@ -67,7 +94,6 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
 
             // open the file
             return RevitApp.Application.OpenSharedParameterFile();
-
         }
 
         private void CreateExternalSharedParamFile(string sharedParameterFilePath)
@@ -99,63 +125,61 @@ namespace TwentyFiftyMaterialsRevit.RevitUI
             return categorySet;
         }
 
-        internal static string CreateStringParameter(TFParameter<string> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateStringParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.String.Text);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.String.Text);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
         }
 
-        internal static string CreateDoubleParameter(TFParameter<double> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateDoubleParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.Number);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.Number);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
         }
 
-        internal static string CreateIntegerParameter(TFParameter<int> parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
+        internal static void CreateIntegerParameter(string parameter, Definitions parameterDefinitions, List<string> parameterDefinitionNames)
         {
-            if (parameterDefinitionNames.Contains(parameter.Name)) return parameter.Name;// if the current definition exists
+            if (parameterDefinitionNames.Contains(parameter)) return;// if the current definition exists
 
 
-            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter.Name, SpecTypeId.Int.Integer);
+            ExternalDefinitionCreationOptions defCrOp = new ExternalDefinitionCreationOptions(parameter, SpecTypeId.Int.Integer);
 
             // Set the visibility of the parameter
-            defCrOp.Visible = parameter.Visible;
+            defCrOp.Visible = true;
 
             var result = parameterDefinitions.Create(defCrOp);
 
             if (result == null)
             {
-                throw new Exception("Parameter with name \"" + parameter.Name + "\" cannot be created.");
+                throw new Exception("Parameter with name \"" + parameter + "\" cannot be created.");
             }
 
-            return parameter.Name;
+            return;
         }
 
 

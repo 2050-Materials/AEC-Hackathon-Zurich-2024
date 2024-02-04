@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TwentyFiftyMaterialsCore.Models
 {
     public class TFMaterial
     {
-        public string Name { get; set; }
-        public string URL { get; set; }
-        public string CalculationType { get; set; }
+        public string MaterialName { get; set; }
+        public string MaterialURL { get; set; }
+        public double MaterialQuantity { get; set; }
+        public double MaterialThickness { get; set; }
+        private double CO2 => 1;
+        public double CO2perM2 => CalculateCO2perM2();
 
-        public void RequestDataFromAPI()
+        internal double CalculateCO2perM2()
         {
-
-        }
-
-        internal void Calculate()
-        {
-
+            return CO2 * MaterialQuantity;
         }
     }
 }
